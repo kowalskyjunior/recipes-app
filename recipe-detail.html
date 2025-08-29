@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Receita - Explorador de Receitas</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header detailed-header">
+        <div class="container">
+            <nav class="breadcrumb">
+                <a href="index.html" class="back-link">← Voltar para a Lista de Receitas</a>
+            </nav>
+            <h1 id="recipe-name" class="recipe-title-detail"></h1>
+        </div>
+    </header>
+
+    <main class="container content-area">
+        <section id="recipe-detail" class="recipe-detail-section">
+            <div class="recipe-hero">
+                <img id="recipe-image" src="" alt="Imagem da receita" class="recipe-image-detail">
+                
+                <div class="recipe-meta">
+                    <p><strong>Categoria:</strong> <span id="recipe-category"></span></p>
+                    <p><strong>Área:</strong> <span id="recipe-area"></span></p>
+                </div>
+            </div>
+            
+            <div class="recipe-content-wrapper">
+                <div class="recipe-ingredients-block">
+                    <h3>Ingredientes</h3>
+                    <ul id="ingredients-list" class="ingredients-list">
+                        </ul>
+                </div>
+                
+                <div class="recipe-instructions-block">
+                    <h3>Modo de Preparo</h3>
+                    <p id="recipe-instructions-text" class="instructions-text"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2025 Explorador de Receitas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="js/recipe.js"></script>
+</body>
+</html>
