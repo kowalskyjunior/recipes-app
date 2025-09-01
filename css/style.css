@@ -66,6 +66,52 @@ body {
 .hero-banner p {
     font-size: 1.2em;
     font-weight: 400;
+    margin-bottom: 20px;
+}
+
+/* Campo de Busca (NOVO) */
+.search-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+#search-input {
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    width: 60%;
+    font-size: 1em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: #343a40;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+}
+
+#search-input::placeholder {
+    color: #999;
+}
+
+#search-input:focus {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+#search-button {
+    padding: 12px 25px;
+    background-color: #ffffff;
+    color: #007bff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#search-button:hover {
+    background-color: #f2f6fa;
+    color: #0056b3;
 }
 
 /* Área de Conteúdo Principal */
@@ -340,5 +386,14 @@ body {
         background-color: #f2f6fa;
         backdrop-filter: none;
         margin-top: 20px;
+    }
+    
+    .search-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #search-input {
+        width: 100%;
     }
 }

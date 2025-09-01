@@ -26,22 +26,66 @@ function translateText(text) {
 
 document.addEventListener('DOMContentLoaded', () => {
     const recipesContainer = document.getElementById('recipes-container');
-    const API_URL = 'https://www.themealdb.com/api/json/v1/1/search.php?s=chicken';
+    const searchInput = document.getElementById('search-input');
+    
+    // Armazena o temporizador para a função de debounce
+    let debounceTimer;
 
-    async function fetchRecipes() {
+    // Função principal para buscar e exibir as receitas
+    async function fetchRecipes(query = '') {
+        recipesContainer.innerHTML = '<p class="loading-message">Carregando receitas...</p>';
+        
+        // A API TheMealDB precisa que o termo de busca seja em inglês
+        const translatedQuery = Object.keys(translations).find(key => 
+            translations[key].toLowerCase() === query.toLowerCase()
+        ) || query;
+
+        let meals = [];
+
         try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            displayRecipes(data.meals);
+            if (translatedQuery) {
+                // Busca por termo de pesquisa
+                const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${translatedQuery}`);
+                const data = await response.json();
+                meals = data.meals;
+            } else {
+                // Carrega uma variedade de pratos aleatórios para a página inicial
+                const initialLetters = ['a', 'b', 'c', 'd', 'e'];
+                const fetchPromises = initialLetters.map(letter => 
+                    fetch(`https://www.themealdb.com/api/json/v1/1/search.php?f=${letter}`)
+                );
+                
+                const responses = await Promise.all(fetchPromises);
+                const results = await Promise.all(responses.map(res => res.json()));
+
+                // Combina os resultados, garantindo que não haja duplicatas
+                const combinedMeals = new Map();
+                results.forEach(result => {
+                    if (result.meals) {
+                        result.meals.forEach(meal => {
+                            if (!combinedMeals.has(meal.idMeal)) {
+                                combinedMeals.set(meal.idMeal, meal);
+                            }
+                        });
+                    }
+                });
+                meals = Array.from(combinedMeals.values());
+            }
+
+            displayRecipes(meals, query);
+
         } catch (error) {
             console.error('Erro ao buscar receitas:', error);
-            recipesContainer.innerHTML = '<p class="error-message">Não foi possível carregar as receitas. Tente novamente mais tarde.</p>';
+            recipesContainer.innerHTML = '<p class="error-message">Não foi possível carregar as receitas. Verifique sua conexão.</p>';
         }
     }
 
-    function displayRecipes(recipes) {
+    // Função para exibir os resultados
+    function displayRecipes(recipes, query) {
+        recipesContainer.innerHTML = ''; // Limpa os resultados anteriores
+        
         if (!recipes || recipes.length === 0) {
-            recipesContainer.innerHTML = '<p class="info-message">Nenhuma receita encontrada. Tente outra busca!</p>';
+            recipesContainer.innerHTML = `<p class="info-message">Nenhuma receita encontrada para "${query}". Tente outro termo!</p>`;
             return;
         }
 
@@ -49,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const recipeCard = document.createElement('div');
             recipeCard.classList.add('recipe-card');
             
-            // Traduzindo o nome da receita
             const translatedTitle = translateText(recipe.strMeal);
 
             recipeCard.innerHTML = `
@@ -64,5 +107,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Lógica de Busca Instantânea ---
+    searchInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        const query = searchInput.value.trim();
+        
+        debounceTimer = setTimeout(() => {
+            fetchRecipes(query);
+        }, 300); // Espera 300ms depois que o usuário para de digitar para pesquisar
+    });
+
+    // Carrega as receitas iniciais ao carregar a página
     fetchRecipes();
 });
