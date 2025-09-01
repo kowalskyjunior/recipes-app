@@ -49,7 +49,7 @@ Você não precisa de nenhum software especial ou servidor para rodar este proje
 
 1.  **Clone o Repositório:**
     ```bash
-    git clone [https://github.com/seu-usuario/explorador-de-receitas.git](https://github.com/seu-usuario/explorador-de-receitas.git)
+    git clone [https://github.com/kowalskyjunior/recipes-app](https://github.com/kowalskyjunior/recipes-app.git)
     ```
     *Se você não tem o Git, pode simplesmente baixar o arquivo ZIP do repositório.*
 
